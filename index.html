@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>My notifications</title>
+    </head>
+    <body>
+        <script>
+            appendTextToBody('Registering Service Worker');
+            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.ready
+                .then(registration => {
+                    appendTextToBody('Service Worker registered');
+
+                    return registration.pushManager.getSubscription().then(currentSubscription => {
+                        if (currentSubscription) {
+                            appendTextToBody('Already subscribed to push notifications');
+                            return currentSubscription;
+                        }
+
+                        appendTextToBody('Subscribing to push notifications');
+                        return registration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: Uint8Array.from([4, 57, 157, 40, 151, 181, 172, 250, 15, 160, 50, 68, 6, 164, 81, 214, 192, 71, 183, 75, 225, 198, 116, 67, 28, 205, 135, 153, 185, 140, 134, 231, 38, 176, 225, 240, 236, 26, 192, 36, 201, 157, 205, 126, 149, 201, 148, 202, 244, 215, 167, 248, 23, 17, 218, 128, 177, 69, 35, 99, 123, 248, 77, 166, 112])
+                        });
+                    });
+                })
+                .then(subscription => {
+                    appendTextToBody('Subscription:');
+                    appendTextToBody(JSON.stringify(subscription.toJSON()));
+                })
+                .catch(error => appendTextToBody(error));
+
+            function appendTextToBody(text) {
+                document.body.innerHTML += '<div>' + text + '</div>';
+            }
+        </script>
+    </body>
+</html>
