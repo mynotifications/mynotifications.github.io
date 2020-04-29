@@ -11,7 +11,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('push', event => {
     const data = event.data.json();
-    event.waitUntil(showNotification(data.title, data.time + ' - ' + data.text));
+    event.waitUntil(showNotification(data.title, data.text));
 });
 
 self.addEventListener('pushsubscriptionchange', event => {
